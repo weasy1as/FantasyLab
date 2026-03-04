@@ -7,8 +7,14 @@ import LandingNavBar from "@/components/LandingNavBar";
 import { SiPremierleague } from "react-icons/si";
 import TopScorers from "@/components/TopScorers";
 import TopAssists from "@/components/TopAssists";
+import Link from "next/link";
+import { PlayerSearch } from "@/components/PlayerSearch";
+import { getBootstrap } from "@/lib/fpl";
 
-export default function LandingPage() {
+import LandingSearch from "@/components/LandingSearch";
+
+export default async function LandingPage() {
+  const players = await getBootstrap();
   return (
     <main className="flex flex-col min-h-screen bg-gradient-to-b from-slate-900 via-neutral-900 to-black text-white overflow-x-hidden">
       {/* HERO */}
@@ -52,11 +58,32 @@ export default function LandingPage() {
               Explore Players
             </button>
 
-            <button className="px-6 py-3 rounded-xl border border-indigo-600 text-indigo-200 bg-black/30 hover:bg-black/40 transition">
+            <Link
+              href="/compare"
+              className="
+    cursor-pointer
+    px-6 py-3
+    rounded-xl
+    border border-indigo-600
+    text-indigo-200
+    bg-black/30
+    transition-all
+    duration-300
+    hover:border-transparent
+    hover:text-white
+    hover:bg-gradient-to-r
+    hover:from-indigo-500
+    hover:to-purple-500
+  "
+            >
               Compare Players
-            </button>
+            </Link>
           </div>
         </div>
+      </section>
+
+      <section className="flex items-center justify-center py-9 md:px-40  ">
+        <LandingSearch players={players.elements} />
       </section>
 
       {/* TRENDING PLAYERS */}

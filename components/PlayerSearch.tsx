@@ -7,14 +7,16 @@ import { Search, X } from "lucide-react";
 
 interface Props {
   players: Player[];
-  onSelect: (player: Player) => void;
+  onSelect?: (player: Player) => void;
   placeholder?: string;
   accentColor?: "indigo" | "pink";
+  onNavigate?: (player: Player) => void;
 }
 
 export function PlayerSearch({
   players,
   onSelect,
+  onNavigate,
   placeholder = "Search players…",
   accentColor = "indigo",
 }: Props) {
@@ -48,7 +50,8 @@ export function PlayerSearch({
   }, []);
 
   function handleSelect(player: Player) {
-    onSelect(player);
+    if (onSelect) onSelect(player);
+    if (onNavigate) onNavigate(player);
     setQuery("");
     setOpen(false);
   }
