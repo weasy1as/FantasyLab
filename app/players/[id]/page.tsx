@@ -1,6 +1,7 @@
 import { PlayerCard } from "@/components/PlayerCard";
 import PlayerFixtures from "@/components/PlayerFixtures";
 import { getBootstrap } from "@/lib/fpl";
+import { Player } from "@/types/player";
 
 export default async function PlayerPage({
   params,
@@ -10,7 +11,7 @@ export default async function PlayerPage({
   const data = await getBootstrap();
   const { id } = await params;
 
-  const player = data.elements.find((p: any) => p.bps === Number(id));
+  const player = data.elements.find((p: Player) => p.bps === Number(id));
 
   if (!player) {
     return <div>Player not found</div>;

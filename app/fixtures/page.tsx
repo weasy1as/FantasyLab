@@ -1,5 +1,4 @@
 import { getFixtures, type Fixture } from "@/lib/fpl";
-import FixtureCard from "@/components/FixtureCard";
 import FixturesBrowser from "@/components/FixturesBrowser";
 
 function groupByGameweek(

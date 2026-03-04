@@ -3,9 +3,10 @@ import React from "react";
 import PlayerImage from "./PlayerImage";
 import { redirect } from "next/navigation";
 import { getPlayerImg } from "@/lib/fpl";
+import { Player } from "@/types/player";
 
 type PlayerDisplayProps = {
-  players: any[];
+  players: Player[];
   topscore?: boolean;
   assist?: boolean;
 };
@@ -20,7 +21,7 @@ const PlayerDisplay = ({ players, topscore, assist }: PlayerDisplayProps) => {
 
   return (
     <div className="grid md:grid-cols-4 sm:grid-cols-2 gap-6">
-      {players.map((p: any) => {
+      {players.map((p: Player) => {
         const highlightStat = topscore
           ? { label: "Goals", value: p.goals_scored }
           : assist

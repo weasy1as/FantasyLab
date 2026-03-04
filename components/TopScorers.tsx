@@ -1,5 +1,4 @@
 import { getTopScorers } from "@/lib/utils";
-import { PlayerCard } from "./PlayerCard";
 import PlayerDisplay from "./PlayerDisplay";
 
 export default async function TopScorers() {

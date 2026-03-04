@@ -66,10 +66,10 @@ function AiComparisonPanel({
   const data = getDummyComparison(playerA, playerB);
 
   return (
-    <div className="rounded-3xl border border-indigo-500/20 bg-linear-to-b from-indigo-950/40 to-neutral-900/60 p-6 space-y-5">
+    <div className="rounded-3xl border border-indigo-500/20 bg-gradient-to-b from-indigo-950/40 to-neutral-900/60 p-6 space-y-5">
       {/* Header */}
       <div className="flex items-center gap-3">
-        <div className="w-9 h-9 rounded-xl bg-linear-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+        <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center shadow-lg shadow-indigo-500/30">
           <Sparkles className="w-4 h-4 text-white" />
         </div>
         <div>
@@ -146,7 +146,7 @@ function EmptySlot({ side, label }: { side: "left" | "right"; label: string }) {
 
   return (
     <div
-      className={`flex flex-col items-center justify-center rounded-3xl border-2 border-dashed ${border} min-h-105 gap-4`}
+      className={`flex flex-col items-center justify-center rounded-3xl border-2 border-dashed ${border} min-h-[420px] gap-4`}
     >
       <div
         className={`w-16 h-16 rounded-full ${dot} flex items-center justify-center`}
@@ -196,7 +196,7 @@ export function ComparePage({ players }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-b from-slate-900 via-neutral-900 to-black px-4 py-10">
+    <div className="min-h-screen bg-gradient-to-b from-slate-900 via-neutral-900 to-black px-4 py-10">
       <div className="max-w-5xl mx-auto space-y-8">
         {/* Page title */}
         <div className="space-y-1">
@@ -205,7 +205,7 @@ export function ComparePage({ players }: Props) {
           </p>
           <h1 className="text-4xl font-black text-neutral-100 tracking-tight leading-none">
             Compare{" "}
-            <span className="bg-linear-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-indigo-400 to-pink-400 bg-clip-text text-transparent">
               Players
             </span>
           </h1>
@@ -312,7 +312,7 @@ export function ComparePage({ players }: Props) {
               className={`w-full rounded-2xl h-12 font-bold text-sm tracking-wide transition-all duration-300 ${
                 showAi
                   ? "bg-neutral-800 hover:bg-neutral-700 text-neutral-300 border border-neutral-700"
-                  : "bg-linear-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white shadow-xl shadow-indigo-500/20"
+                  : "bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-400 hover:to-purple-500 text-white shadow-xl shadow-indigo-500/20"
               }`}
             >
               {loadingAi ? (
@@ -329,7 +329,7 @@ export function ComparePage({ players }: Props) {
                   <Sparkles className="w-4 h-4" />
                   AI Head-to-Head Analysis
                   <span className="ml-1 text-[10px] bg-white/20 rounded-full px-2 py-0.5">
-                    {playerA.web_name} vs {playerB.web_name}
+                    {playerA?.web_name} vs {playerB?.web_name}
                   </span>
                 </span>
               )}

@@ -1,7 +1,5 @@
 import Image from "next/image";
 import { getBootstrap } from "@/lib/fpl";
-import PlayerImage from "@/components/PlayerImage";
-import { redirect } from "next/navigation";
 import PlayerDisplay from "@/components/PlayerDisplay";
 
 const getBadge = (code: number) =>

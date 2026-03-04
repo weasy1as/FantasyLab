@@ -17,11 +17,7 @@ interface PlayerFixtureRowProps {
   teamCode: number;
 }
 
-function PlayerFixtureRow({
-  fixture,
-  teamId,
-  teamCode,
-}: PlayerFixtureRowProps) {
+function PlayerFixtureRow({ fixture, teamId }: PlayerFixtureRowProps) {
   const isHome = fixture.team_h === teamId;
   const opponentId = isHome ? fixture.team_a : fixture.team_h;
   const opponent = TEAM_NAMES[opponentId] ?? {
@@ -39,12 +35,14 @@ function PlayerFixtureRow({
     const teamScore = isHome ? fixture.team_h_score : fixture.team_a_score;
     const oppScore = isHome ? fixture.team_a_score : fixture.team_h_score;
 
-    if (teamScore > oppScore) {
-      resultColor = "text-emerald-400"; // Win (light green)
-    } else if (teamScore < oppScore) {
-      resultColor = "text-red-400"; // Loss (red)
-    } else {
-      resultColor = "text-gray-400"; // Draw (gray)
+    if (teamScore !== null && oppScore !== null) {
+      if (teamScore > oppScore) {
+        resultColor = "text-emerald-400"; // Win (light green)
+      } else if (teamScore < oppScore) {
+        resultColor = "text-red-400"; // Loss (red)
+      } else {
+        resultColor = "text-gray-400"; // Draw (gray)
+      }
     }
   }
   console.log(opponent);

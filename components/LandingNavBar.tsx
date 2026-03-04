@@ -10,7 +10,6 @@ import {
   MobileNavMenu,
   MobileNavToggle,
   NavbarLogo,
-  NavbarButton,
 } from "@/components/ui/resizable-navbar"; // your file path
 
 export default function LandingNavBar() {
