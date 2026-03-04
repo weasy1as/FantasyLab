@@ -1,3 +1,4 @@
+import { TeamBadge } from "@/app/teams/page";
 import { TEAM_NAMES, type Fixture } from "@/lib/fpl";
 
 // ── helpers ───────────────────────────────────────────────────────────────────
@@ -48,12 +49,15 @@ export default function FixtureCard({ fixture }: FixtureCardProps) {
       <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
         {/* Home team */}
         <div className="flex items-center gap-2.5">
-          <span className="font-semibold text-gray-200 uppercase tracking-wide text-sm truncate hidden sm:block">
-            {home.name}
-          </span>
-          <span className="font-semibold text-gray-200 uppercase tracking-wide text-sm sm:hidden">
-            {home.short}
-          </span>
+          <div className="flex flex-col items-center gap-3">
+            <TeamBadge teamCode={home.code} teamName={home.name} />{" "}
+            <span className="font-semibold text-gray-200 uppercase tracking-wide text-sm truncate hidden sm:block">
+              {home.name}
+            </span>
+            <span className="font-semibold text-gray-200 uppercase tracking-wide text-sm sm:hidden">
+              {home.short}
+            </span>
+          </div>
         </div>
 
         {/* Score / vs */}
@@ -79,12 +83,15 @@ export default function FixtureCard({ fixture }: FixtureCardProps) {
 
         {/* Away team */}
         <div className="flex items-center justify-end gap-2.5">
-          <span className="font-semibold text-gray-200 uppercase tracking-wide text-sm truncate hidden sm:block">
-            {away.name}
-          </span>
-          <span className="font-semibold text-gray-200 uppercase tracking-wide text-sm sm:hidden">
-            {away.short}
-          </span>
+          <div className="flex flex-col items-center gap-3">
+            <TeamBadge teamCode={away.code} teamName={away.name} />{" "}
+            <span className="font-semibold text-gray-200 uppercase tracking-wide text-sm truncate hidden sm:block">
+              {away.name}
+            </span>
+            <span className="font-semibold text-gray-200 uppercase tracking-wide text-sm sm:hidden">
+              {away.short}
+            </span>
+          </div>
         </div>
       </div>
 

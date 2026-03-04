@@ -62,27 +62,6 @@ export default function LandingPage() {
         <h2 className="text-3xl font-semibold mb-8">Trending Players</h2>
         <TopScorers />
         <TopAssists />
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          {/* Example card style */}
-
-          <div className="bg-neutral-900/50 backdrop-blur-sm p-5 rounded-2xl ring-1 ring-neutral-800 hover:ring-indigo-500 transition-shadow shadow-md">
-            <div className="h-36 bg-gradient-to-b from-neutral-800 to-neutral-700 rounded-xl mb-4" />
-            <h3 className="font-semibold mb-1 text-neutral-100">Player Name</h3>
-            <p className="text-neutral-400 text-sm">Club • Position</p>
-          </div>
-        </div>
-      </section>
-
-      {/* FIXTURES */}
-      <section className="py-20 px-6 lg:px-20 max-w-7xl mx-auto w-full">
-        <h2 className="text-3xl font-semibold mb-8">Upcoming Fixtures</h2>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6">
-          <div className="bg-neutral-900/50 backdrop-blur-sm p-5 rounded-2xl ring-1 ring-neutral-800 hover:ring-indigo-500 transition-shadow shadow-md">
-            <div className="h-24 bg-gradient-to-b from-neutral-800 to-neutral-700 rounded-xl mb-4" />
-            <p className="text-neutral-300">Team A vs Team B</p>
-          </div>
-        </div>
       </section>
 
       {/* FOOTER */}

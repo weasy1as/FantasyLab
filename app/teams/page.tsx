@@ -18,7 +18,7 @@ type Props = {
   teamName: string;
 };
 
-function TeamBadge({ teamCode, teamName }: Props) {
+export function TeamBadge({ teamCode, teamName }: Props) {
   return (
     <Image
       src={getTeamBadge(teamCode)}
@@ -33,6 +33,7 @@ function TeamBadge({ teamCode, teamName }: Props) {
 export default async function TeamsPage() {
   const data = await getBootstrap();
   const teams: Team[] = data.teams;
+  console.log(teams);
 
   return (
     <main className="min-h-screen bg-neutral-950 text-white px-6 py-12">

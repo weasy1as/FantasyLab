@@ -1,3 +1,4 @@
+import { TeamBadge } from "@/app/teams/page";
 import { getFixtures, TEAM_NAMES, type Fixture } from "@/lib/fpl";
 
 // ── helpers ───────────────────────────────────────────────────────────────────
@@ -13,9 +14,14 @@ function formatDate(iso: string | null): string {
 interface PlayerFixtureRowProps {
   fixture: Fixture;
   teamId: number;
+  teamCode: number;
 }
 
-function PlayerFixtureRow({ fixture, teamId }: PlayerFixtureRowProps) {
+function PlayerFixtureRow({
+  fixture,
+  teamId,
+  teamCode,
+}: PlayerFixtureRowProps) {
   const isHome = fixture.team_h === teamId;
   const opponentId = isHome ? fixture.team_a : fixture.team_h;
   const opponent = TEAM_NAMES[opponentId] ?? {
@@ -41,13 +47,17 @@ function PlayerFixtureRow({ fixture, teamId }: PlayerFixtureRowProps) {
       resultColor = "text-gray-400"; // Draw (gray)
     }
   }
+  console.log(opponent);
 
   return (
     <div className="flex items-center justify-between py-2.5 border-b border-neutral-800 last:border-0">
       {/* Opponent + H/A */}
       <div className="flex items-center gap-2 min-w-0">
+        <div>
+          <TeamBadge teamCode={opponent.code} teamName={opponent.name} />
+        </div>
         <span className="text-neutral-100 font-semibold text-sm truncate">
-          {opponent.short}
+          {opponent.name}
         </span>
         <span className="text-[10px] font-bold uppercase tracking-widest text-neutral-500">
           {isHome ? "H" : "A"}
@@ -84,9 +94,14 @@ interface Props {
   teamId: number;
   /** How many upcoming fixtures to show (default 8) */
   limit?: number;
+  teamCode: number;
 }
 
-export default async function PlayerFixtures({ teamId, limit = 8 }: Props) {
+export default async function PlayerFixtures({
+  teamId,
+  limit = 8,
+  teamCode,
+}: Props) {
   const allFixtures = await getFixtures();
 
   // All fixtures for this team, sorted by GW
@@ -107,6 +122,7 @@ export default async function PlayerFixtures({ teamId, limit = 8 }: Props) {
   const pastCount = 3;
   const from = Math.max(0, startIdx - pastCount);
   const visibleFixtures = teamFixtures.slice(from, from + limit);
+  console.log(visibleFixtures);
 
   const teamName = TEAM_NAMES[teamId]?.name ?? `Team ${teamId}`;
 
@@ -124,9 +140,12 @@ export default async function PlayerFixtures({ teamId, limit = 8 }: Props) {
         <h3 className="text-sm font-extrabold uppercase tracking-widest text-neutral-100">
           Fixtures
         </h3>
-        <span className="text-[10px] uppercase tracking-widest text-neutral-600">
-          {teamName}
-        </span>
+        <div>
+          <TeamBadge teamCode={teamCode} teamName={teamName} />{" "}
+          <span className="text-[10px] uppercase tracking-widest text-neutral-600">
+            {teamName}
+          </span>
+        </div>
       </div>
 
       {/* Column labels */}
@@ -142,7 +161,12 @@ export default async function PlayerFixtures({ teamId, limit = 8 }: Props) {
       {/* Fixture rows */}
       <div>
         {visibleFixtures.map((f) => (
-          <PlayerFixtureRow key={f.id} fixture={f} teamId={teamId} />
+          <PlayerFixtureRow
+            key={f.id}
+            fixture={f}
+            teamId={teamId}
+            teamCode={teamCode}
+          />
         ))}
       </div>
     </div>
