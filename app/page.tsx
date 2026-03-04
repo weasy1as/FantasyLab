@@ -14,19 +14,21 @@ export default function LandingPage() {
       {/* HERO */}
       <section className="relative flex flex-col lg:flex-row items-center justify-between mt-20 px-6 lg:px-20 gap-12">
         {/* Image */}
-        <div className="relative flex-1 rounded-3xl overflow-hidden shadow-2xl">
+        <div className="relative flex-1 h-60 lg:h-[520px] rounded-3xl overflow-hidden shadow-2xl block md:hidden">
           <Image
             src={heroPlayers}
             alt="Fantasy football players"
-            className="object-cover w-full h-96 hidden md:block lg:h-130"
+            className="object-cover"
             priority
+            sizes="100vw"
           />
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
         </div>
 
         {/* Text */}
-        <div className="flex flex-col items-center lg:items-start text-center lg:text-left max-w-xl">
+        <div className="flex flex-col items-center   text-center  w-full justify-center">
+          <SiPremierleague size={140} />
           <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-4">
             <span className="block bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
               Fantasy Football Analytics
