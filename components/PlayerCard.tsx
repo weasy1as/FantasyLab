@@ -43,7 +43,13 @@ function AiInsightPanel({
   player: Player;
   insight: AiInsight;
 }) {
-  const { verdict, verdictType, summary, bullets, captainScore } = insight;
+  const {
+    verdict = "N/A",
+    verdictType = "neutral",
+    summary = "",
+    bullets = [],
+    captainScore = 0,
+  } = insight || {};
 
   const verdictColors = {
     positive:
