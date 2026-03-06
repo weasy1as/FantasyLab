@@ -4,7 +4,6 @@ const BASE = "https://fantasy.premierleague.com/api";
 export async function getBootstrap() {
   try {
     const res = await fetch(`${BASE}/bootstrap-static/`, {
-      cache: "force-cache",
       next: { revalidate: 3600 },
     });
 
@@ -22,7 +21,6 @@ export async function getBootstrap() {
 }
 export async function getPlayerSummary(id: number) {
   const res = await fetch(`${BASE}/element-summary/${id}/`, {
-    cache: "force-cache",
     next: { revalidate: 1800 },
   });
   return res.json();
