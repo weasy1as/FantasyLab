@@ -2,13 +2,24 @@
 const BASE = "https://fantasy.premierleague.com/api";
 
 export async function getBootstrap() {
-  const res = await fetch(`${BASE}/bootstrap-static/`, {
-    cache: "force-cache",
-    next: { revalidate: 3600 },
-  });
-  return res.json();
-}
+  try {
+    const res = await fetch(`${BASE}/bootstrap-static/`, {
+      cache: "force-cache",
+      next: { revalidate: 3600 },
+    });
 
+    if (!res.ok) {
+      throw new Error("Failed to fetch bootstrap data");
+    }
+
+    return await res.json();
+  } catch (error) {
+    console.error("FPL API error:", error);
+
+    // fallback so the page doesn't crash
+    return { elements: [], teams: [] };
+  }
+}
 export async function getPlayerSummary(id: number) {
   const res = await fetch(`${BASE}/element-summary/${id}/`, {
     cache: "force-cache",

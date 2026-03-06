@@ -21,30 +21,8 @@ import {
 type Props = {
   player: Player;
 };
-
-// ── dummy AI insight ──────────────────────────────────────────────────────────
-
-const DUMMY_INSIGHT = {
-  verdict: "Strong Buy",
-  verdictType: "positive" as const,
-  summary:
-    "This player is in exceptional form over the last 4 gameweeks, averaging 9.2 points per game. With a run of favourable fixtures coming up and a high involvement in set pieces, he represents outstanding value at his current price point.",
-  bullets: [
-    { icon: "up", text: "Top 3 in points-per-million this season" },
-    { icon: "up", text: "3 goals & 4 assists in last 5 GWs" },
-    {
-      icon: "up",
-      text: "Favourable run of fixtures: GW29–32 rated 2 or lower",
-    },
-    { icon: "neutral", text: "Ownership at 24% — differential potential" },
-    { icon: "down", text: "Minor knock reported in training — monitor" },
-  ],
-  captainScore: 87,
-};
-
-function AiInsightPanel({ player }: { player: Player }) {
-  const { verdict, verdictType, summary, bullets, captainScore } =
-    DUMMY_INSIGHT;
+function AiInsightPanel({ player, insight }: { player: Player; insight: any }) {
+  const { verdict, verdictType, summary, bullets, captainScore } = insight;
 
   const verdictColors = {
     positive:
@@ -161,9 +139,47 @@ function Stat({
 export function PlayerCard({ player }: Props) {
   const [showInsight, setShowInsight] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [insight, setInsight] = useState<any | null>(null);
+
+  async function fetchInsight(player: Player) {
+    const playerData = {
+      name: `${player.first_name} ${player.second_name}`,
+      price: player.now_cost / 10,
+      ownership: Number(player.selected_by_percent),
+      total_points: player.total_points,
+      points_per_game: Number(player.points_per_game),
+      form: Number(player.form),
+      minutes: player.minutes,
+      goals: player.goals_scored,
+      assists: player.assists,
+      xg: Number(player.expected_goals),
+      xa: Number(player.expected_assists),
+      xgi: Number(player.expected_goal_involvements),
+      influence: Number(player.influence),
+      creativity: Number(player.creativity),
+      threat: Number(player.threat),
+      ict_index: Number(player.ict_index),
+      bonus: player.bonus,
+      yellow_cards: player.yellow_cards,
+      expected_goals_per_90: player.expected_goals_per_90,
+      expected_assists_per_90: player.expected_assists_per_90,
+      availability: player.chance_of_playing_next_round,
+    };
+
+    const res = await fetch("/api/player-insight", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(playerData),
+    });
+
+    return res.json();
+  }
 
   const position = positions[player.element_type];
   const price = (player.now_cost / 10).toFixed(1);
+  console.log(player);
 
   const statusMap = {
     a: { color: "bg-emerald-400", label: "Available" },
@@ -175,16 +191,23 @@ export function PlayerCard({ player }: Props) {
   const status =
     statusMap[player.status as keyof typeof statusMap] ?? statusMap.u;
 
-  function handleInsightClick() {
+  async function handleInsightClick() {
     if (showInsight) {
       setShowInsight(false);
       return;
     }
+
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      const result = await fetchInsight(player);
+      setInsight(result);
       setShowInsight(true);
-    }, 1200);
+    } catch (err) {
+      console.error("AI insight failed", err);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -325,7 +348,9 @@ export function PlayerCard({ player }: Props) {
         </Button>
 
         {/* AI INSIGHT PANEL */}
-        {showInsight && <AiInsightPanel player={player} />}
+        {showInsight && insight && (
+          <AiInsightPanel player={player} insight={insight} />
+        )}
       </CardContent>
     </Card>
   );
