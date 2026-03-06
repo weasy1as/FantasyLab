@@ -7,6 +7,7 @@ import {
   useScroll,
   useMotionValueEvent,
 } from "motion/react";
+import Link from "next/link";
 
 import React, { useRef, useState } from "react";
 import { SiPremierleague } from "react-icons/si";
@@ -231,13 +232,13 @@ export const MobileNavToggle = ({
 
 export const NavbarLogo = () => {
   return (
-    <a
-      href="#"
+    <Link
+      href="/"
       className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-neutral-100"
     >
       <SiPremierleague size={40} />
       <span className="font-medium text-neutral-100">Fantasy Lab</span>
-    </a>
+    </Link>
   );
 };
 

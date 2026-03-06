@@ -21,7 +21,28 @@ import {
 type Props = {
   player: Player;
 };
-function AiInsightPanel({ player, insight }: { player: Player; insight: any }) {
+type VerdictType = "positive" | "neutral" | "negative";
+
+type Bullet = {
+  icon: "up" | "down" | "neutral";
+  text: string;
+};
+
+type AiInsight = {
+  verdict: string;
+  verdictType: VerdictType;
+  summary: string;
+  bullets: Bullet[];
+  captainScore: number;
+};
+
+function AiInsightPanel({
+  player,
+  insight,
+}: {
+  player: Player;
+  insight: AiInsight;
+}) {
   const { verdict, verdictType, summary, bullets, captainScore } = insight;
 
   const verdictColors = {
