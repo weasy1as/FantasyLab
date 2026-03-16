@@ -33,7 +33,6 @@ export function TeamBadge({ teamCode, teamName }: Props) {
 export default async function TeamsPage() {
   const data = await getBootstrap();
   const teams: Team[] = data.teams;
-  console.log(teams);
 
   return (
     <main className="min-h-screen bg-neutral-950 text-white px-6 py-12">

@@ -151,9 +151,10 @@ function EmptySlot({ side, label }: { side: "left" | "right"; label: string }) {
 
 interface Props {
   players: Player[];
+  gameweek: number;
 }
 
-export function ComparePage({ players }: Props) {
+export function ComparePage({ players, gameweek }: Props) {
   const [playerA, setPlayerA] = useState<Player | null>(null);
   const [playerB, setPlayerB] = useState<Player | null>(null);
   const [showAi, setShowAi] = useState(false);
@@ -163,6 +164,7 @@ export function ComparePage({ players }: Props) {
   function preparePlayerData(player: Player) {
     return {
       name: `${player.first_name} ${player.second_name}`,
+      gameweek: gameweek,
       price: player.now_cost / 10,
       ownership: Number(player.selected_by_percent),
       total_points: player.total_points,

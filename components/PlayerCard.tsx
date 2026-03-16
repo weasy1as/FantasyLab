@@ -20,6 +20,7 @@ import {
 
 type Props = {
   player: Player;
+  gameweek: number;
 };
 type VerdictType = "positive" | "neutral" | "negative";
 
@@ -163,14 +164,16 @@ function Stat({
 
 // ── main card ─────────────────────────────────────────────────────────────────
 
-export function PlayerCard({ player }: Props) {
+export function PlayerCard({ player, gameweek }: Props) {
   const [showInsight, setShowInsight] = useState(false);
   const [loading, setLoading] = useState(false);
   const [insight, setInsight] = useState<any | null>(null);
 
-  async function fetchInsight(player: Player) {
+  async function fetchInsight(player: Player, currentGameweek: number) {
     const playerData = {
       name: `${player.first_name} ${player.second_name}`,
+      gameweek: gameweek,
+      id: player.bps,
       price: player.now_cost / 10,
       ownership: Number(player.selected_by_percent),
       total_points: player.total_points,
@@ -198,7 +201,7 @@ export function PlayerCard({ player }: Props) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(playerData),
+      body: JSON.stringify({ player: playerData, gameweek }),
     });
 
     return res.json();
@@ -206,7 +209,6 @@ export function PlayerCard({ player }: Props) {
 
   const position = positions[player.element_type];
   const price = (player.now_cost / 10).toFixed(1);
-  console.log(player);
 
   const statusMap = {
     a: { color: "bg-emerald-400", label: "Available" },
@@ -227,7 +229,7 @@ export function PlayerCard({ player }: Props) {
     setLoading(true);
 
     try {
-      const result = await fetchInsight(player);
+      const result = await fetchInsight(player, gameweek);
       setInsight(result);
       setShowInsight(true);
     } catch (err) {

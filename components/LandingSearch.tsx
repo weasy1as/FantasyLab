@@ -10,7 +10,6 @@ interface Props {
 
 export default function LandingSearch({ players }: Props) {
   const router = useRouter();
-  console.log(players);
 
   return (
     <PlayerSearch

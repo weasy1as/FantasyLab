@@ -45,7 +45,6 @@ function PlayerFixtureRow({ fixture, teamId }: PlayerFixtureRowProps) {
       }
     }
   }
-  console.log(opponent);
 
   return (
     <div className="flex items-center justify-between py-2.5 border-b border-neutral-800 last:border-0">
@@ -120,7 +119,6 @@ export default async function PlayerFixtures({
   const pastCount = 3;
   const from = Math.max(0, startIdx - pastCount);
   const visibleFixtures = teamFixtures.slice(from, from + limit);
-  console.log(visibleFixtures);
 
   const teamName = TEAM_NAMES[teamId]?.name ?? `Team ${teamId}`;
 

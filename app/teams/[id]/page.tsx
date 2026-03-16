@@ -13,14 +13,11 @@ export default async function TeamPage({
   const data = await getBootstrap();
   const { id } = await params; // ⭐ unwrap params
   const code = Number(id);
-  // console.log(data);
   // Find team
   const team = data.teams.find((t: any) => t.code === code);
-  //console.log(team);
 
   // Get players from data.elements
   const players = data.elements.filter((p: any) => p.team_code === code);
-  console.log(players);
 
   //if (!team) return <div>Team not found</div>;
 

@@ -16,12 +16,16 @@ export default async function PlayerPage({
   if (!player) {
     return <div>Player not found</div>;
   }
-  console.log(player.team_code);
+
+  const currentGameweek =
+    data.events.find((event: any) => event.is_current)?.id || 1;
+  console.log(currentGameweek);
+  console.log(player);
 
   return (
     <div className="min-h-screen p-8 bg-gradient-to-b from-slate-900 via-neutral-900 to-black">
       <div className="flex flex-col lg:flex-row items-start justify-center gap-6 max-w-3xl mx-auto">
-        <PlayerCard player={player} />
+        <PlayerCard player={player} gameweek={currentGameweek} />
         <PlayerFixtures teamId={player.team} teamCode={player.team_code} />
       </div>
     </div>

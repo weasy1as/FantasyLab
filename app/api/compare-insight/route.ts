@@ -35,6 +35,8 @@ Return ONLY JSON. No explanation. No markdown.
 
 Player A: ${playerA.name}
 
+Gameweek: ${playerA.gameweek}
+
 Stats:
 Price: ${playerA.price}
 Ownership: ${playerA.ownership}%
@@ -66,6 +68,8 @@ xA per 90: ${playerA.expected_assists_per_90}
 Availability: ${playerA.availability}%
 
 Player B: ${playerB.name}
+
+Gameweek: ${playerB.gameweek}
 
 Stats:
 Price: ${playerB.price}
