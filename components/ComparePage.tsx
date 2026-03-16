@@ -15,55 +15,40 @@ import {
   ArrowLeftRight,
 } from "lucide-react";
 
-// ── dummy AI comparison data ──────────────────────────────────────────────────
+type Bullet = {
+  icon: "up" | "down" | "neutral";
+  player: string | null;
+  text: string;
+};
 
-function getDummyComparison(a: Player, b: Player) {
-  return {
-    winner: a.web_name,
-    loser: b.web_name,
-    summary: `${a.web_name} edges out ${b.web_name} this gameweek. While both players are in solid form, ${a.web_name}'s superior fixture run and higher floor make him the safer pick. ${b.web_name} has the upside for big hauls but carries more risk given his recent rotation concerns.`,
-    bullets: [
-      {
-        icon: "up",
-        player: a.web_name,
-        text: "Better fixtures over the next 4 GWs (avg FDR 2.1 vs 3.4)",
-      },
-      {
-        icon: "up",
-        player: a.web_name,
-        text: "Higher PPG this season (7.2 vs 5.8)",
-      },
-      {
-        icon: "up",
-        player: b.web_name,
-        text: "Higher ownership — safer for rank protection",
-      },
-      {
-        icon: "down",
-        player: b.web_name,
-        text: "Missed training session this week — slight doubt",
-      },
-      {
-        icon: "neutral",
-        player: null,
-        text: "Both are solid captain options in their respective fixtures",
-      },
-    ],
-    captainPick: a.web_name,
-    captainReason: `${a.web_name} is the recommended captain this week due to a home fixture against a side conceding 2+ chances per game.`,
-  };
-}
+type ComparisonInsight = {
+  winner: string;
+  loser: string;
+  summary: string;
+  bullets: Bullet[];
+  captainPick: string;
+  captainReason: string;
+};
 
 // ── AI comparison panel ───────────────────────────────────────────────────────
 
 function AiComparisonPanel({
   playerA,
   playerB,
+  insight,
 }: {
   playerA: Player;
   playerB: Player;
+  insight: ComparisonInsight;
 }) {
-  const data = getDummyComparison(playerA, playerB);
+  const {
+    winner = "N/A",
+    loser = "N/A",
+    summary = "",
+    bullets = [],
+    captainPick = "N/A",
+    captainReason = "",
+  } = insight || {};
 
   return (
     <div className="rounded-3xl border border-indigo-500/20 bg-gradient-to-b from-indigo-950/40 to-neutral-900/60 p-6 space-y-5">
@@ -82,18 +67,18 @@ function AiComparisonPanel({
         </div>
         {/* Winner badge */}
         <div className="ml-auto px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-400 text-xs font-bold">
-          ✦ {data.winner} wins
+          ✦ {winner} wins
         </div>
       </div>
 
       <Separator className="bg-indigo-500/10" />
 
       {/* Summary */}
-      <p className="text-sm text-neutral-300 leading-relaxed">{data.summary}</p>
+      <p className="text-sm text-neutral-300 leading-relaxed">{summary}</p>
 
       {/* Bullets */}
       <ul className="space-y-2.5">
-        {data.bullets.map((b, i) => (
+        {bullets.map((b, i) => (
           <li key={i} className="flex items-start gap-2.5 text-sm">
             {b.icon === "up" && (
               <TrendingUp className="w-4 h-4 text-emerald-400 mt-0.5 shrink-0" />
@@ -125,8 +110,8 @@ function AiComparisonPanel({
         <p className="text-[10px] uppercase tracking-widest text-indigo-400 font-extrabold">
           ⚽ Captain Recommendation
         </p>
-        <p className="text-sm font-bold text-neutral-100">{data.captainPick}</p>
-        <p className="text-xs text-neutral-400">{data.captainReason}</p>
+        <p className="text-sm font-bold text-neutral-100">{captainPick}</p>
+        <p className="text-xs text-neutral-400">{captainReason}</p>
       </div>
 
       <p className="text-[10px] text-neutral-600 italic">
@@ -173,6 +158,48 @@ export function ComparePage({ players }: Props) {
   const [playerB, setPlayerB] = useState<Player | null>(null);
   const [showAi, setShowAi] = useState(false);
   const [loadingAi, setLoadingAi] = useState(false);
+  const [insight, setInsight] = useState<ComparisonInsight | null>(null);
+
+  function preparePlayerData(player: Player) {
+    return {
+      name: `${player.first_name} ${player.second_name}`,
+      price: player.now_cost / 10,
+      ownership: Number(player.selected_by_percent),
+      total_points: player.total_points,
+      points_per_game: Number(player.points_per_game),
+      form: Number(player.form),
+      minutes: player.minutes,
+      goals: player.goals_scored,
+      assists: player.assists,
+      xg: Number(player.expected_goals),
+      xa: Number(player.expected_assists),
+      xgi: Number(player.expected_goal_involvements),
+      influence: Number(player.influence),
+      creativity: Number(player.creativity),
+      threat: Number(player.threat),
+      ict_index: Number(player.ict_index),
+      bonus: player.bonus,
+      yellow_cards: player.yellow_cards,
+      expected_goals_per_90: player.expected_goals_per_90,
+      expected_assists_per_90: player.expected_assists_per_90,
+      availability: player.chance_of_playing_next_round,
+    };
+  }
+
+  async function fetchComparison(playerA: Player, playerB: Player) {
+    const dataA = preparePlayerData(playerA);
+    const dataB = preparePlayerData(playerB);
+
+    const res = await fetch("/api/compare-insight", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ playerA: dataA, playerB: dataB }),
+    });
+
+    return res.json();
+  }
 
   // truthy only when both players are selected
   const canCompare: boolean = Boolean(playerA && playerB);
@@ -183,10 +210,22 @@ export function ComparePage({ players }: Props) {
       return;
     }
     setLoadingAi(true);
-    setTimeout(() => {
+
+    try {
+      if (playerA && playerB) {
+        fetchComparison(playerA, playerB).then((result) => {
+          setInsight(result);
+          setShowAi(true);
+        }).catch((err) => {
+          console.error("AI comparison failed", err);
+        }).finally(() => {
+          setLoadingAi(false);
+        });
+      }
+    } catch (err) {
+      console.error("AI comparison failed", err);
       setLoadingAi(false);
-      setShowAi(true);
-    }, 1400);
+    }
   }
 
   function swapPlayers() {
@@ -225,6 +264,7 @@ export function ComparePage({ players }: Props) {
               onSelect={(p) => {
                 setPlayerA(p);
                 setShowAi(false);
+                setInsight(null);
               }}
               placeholder="Search first player…"
               accentColor="indigo"
@@ -238,6 +278,7 @@ export function ComparePage({ players }: Props) {
                   onClick={() => {
                     setPlayerA(null);
                     setShowAi(false);
+                    setInsight(null);
                   }}
                 >
                   <X className="w-3.5 h-3.5 text-indigo-400/60 hover:text-indigo-300 transition-colors" />
@@ -267,6 +308,7 @@ export function ComparePage({ players }: Props) {
               onSelect={(p) => {
                 setPlayerB(p);
                 setShowAi(false);
+                setInsight(null);
               }}
               placeholder="Search second player…"
               accentColor="pink"
@@ -280,6 +322,7 @@ export function ComparePage({ players }: Props) {
                   onClick={() => {
                     setPlayerB(null);
                     setShowAi(false);
+                    setInsight(null);
                   }}
                 >
                   <X className="w-3.5 h-3.5 text-pink-400/60 hover:text-pink-300 transition-colors" />
@@ -335,8 +378,8 @@ export function ComparePage({ players }: Props) {
               )}
             </Button>
 
-            {showAi && playerA && playerB && (
-              <AiComparisonPanel playerA={playerA} playerB={playerB} />
+            {showAi && insight && playerA && playerB && (
+              <AiComparisonPanel playerA={playerA} playerB={playerB} insight={insight} />
             )}
           </div>
         )}
