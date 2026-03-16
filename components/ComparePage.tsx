@@ -213,14 +213,17 @@ export function ComparePage({ players }: Props) {
 
     try {
       if (playerA && playerB) {
-        fetchComparison(playerA, playerB).then((result) => {
-          setInsight(result);
-          setShowAi(true);
-        }).catch((err) => {
-          console.error("AI comparison failed", err);
-        }).finally(() => {
-          setLoadingAi(false);
-        });
+        fetchComparison(playerA, playerB)
+          .then((result) => {
+            setInsight(result);
+            setShowAi(true);
+          })
+          .catch((err) => {
+            console.error("AI comparison failed", err);
+          })
+          .finally(() => {
+            setLoadingAi(false);
+          });
       }
     } catch (err) {
       console.error("AI comparison failed", err);
@@ -379,7 +382,11 @@ export function ComparePage({ players }: Props) {
             </Button>
 
             {showAi && insight && playerA && playerB && (
-              <AiComparisonPanel playerA={playerA} playerB={playerB} insight={insight} />
+              <AiComparisonPanel
+                playerA={playerA}
+                playerB={playerB}
+                insight={insight}
+              />
             )}
           </div>
         )}
