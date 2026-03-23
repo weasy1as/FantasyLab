@@ -90,7 +90,7 @@ function AiComparisonPanel({
               <Minus className="w-4 h-4 text-yellow-400 mt-0.5 shrink-0" />
             )}
             <span className="text-neutral-300">
-              {b.player && (
+              {b.player && b.player !== "null" && (
                 <span
                   className={`font-bold mr-1 ${b.player === playerA.web_name ? "text-indigo-300" : "text-pink-300"}`}
                 >

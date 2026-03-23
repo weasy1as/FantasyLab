@@ -33,6 +33,13 @@ The JSON format must be:
 
 Return ONLY JSON. No explanation. No markdown.
 
+For bullets:
+- Use "up" for advantages of one player over the other
+- Use "down" for disadvantages of one player
+- Use "neutral" for comparisons that apply to both players equally
+- For "up" and "down", set "player" to the relevant player's name
+- For "neutral", set "player" to null (not the string "null")
+
 Player A: ${playerA.name}
 
 Gameweek: ${playerA.gameweek}
